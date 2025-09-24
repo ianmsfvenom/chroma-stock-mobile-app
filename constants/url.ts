@@ -1,0 +1,1 @@
+export const DesktopBaseURL = 'https://github.com';
