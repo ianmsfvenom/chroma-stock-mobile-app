@@ -1,1 +1,1 @@
-export const DesktopBaseURL = 'https://github.com';
+export const desktopBaseURL = 'http://192.168.1.13:8000';

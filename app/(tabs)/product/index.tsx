@@ -1,24 +1,127 @@
 import BasicDropdown from "@/components/basic-dropdown";
+import ItemProductList from "@/components/product/item-product-list";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { useState } from "react";
-import { StyleSheet, TextInput, useColorScheme, View } from "react-native";
-
-const data = [
-    { label: 'Item 1', value: '1' },
-    { label: 'Item 2', value: '2' },
-    { label: 'Item 3', value: '3' },
-    { label: 'Item 4', value: '4' },
-    { label: 'Item 5', value: '5' },
-    { label: 'Item 6', value: '6' },
-    { label: 'Item 7', value: '7' },
-    { label: 'Item 8', value: '8' },
-  ];
+import { desktopBaseURL } from "@/constants/url";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect, useState } from "react";
+import { Alert, ScrollView, StyleSheet, TextInput, View } from "react-native";
+import fetch from 'node-fetch'
+import { router } from "expo-router";
+import { CategoryResponse, ProductResponse, SubcategoryResponse } from "@/types/response";
 
 export default function ProductScreen() {
-    const theme = useColorScheme();
-    const [ category , setCategory ] = useState('');
-    const [ subCategory , setSubCategory ] = useState('');
+    const [ category, setCategory ] = useState('');
+    const [ subCategory, setSubCategory ] = useState('');
+    const [ categoriesData, setCategoriesData ] = useState<CategoryResponse[]>([]);
+    const [ subCategoriesData, setSubCategoriesData ] = useState<SubcategoryResponse[]>([]);
+    const [ search, setSearch ] = useState('');
+    const [ filteredProducts, setFilteredProducts ] = useState<ProductResponse[]>([]);
+    const [ allProductsData, setAllProductsData ] = useState<ProductResponse[]>([]);
+    
+    useEffect(() => {
+       const getDatas = async () => {
+            const token = await AsyncStorage.getItem('access_token');
+            if(!token) {
+                await AsyncStorage.removeItem('access_token');
+                Alert.alert('Atenção', 'Sua sessão expirou!');
+                return router.replace('/login');
+            }
+            try {
+                const responseCategory = await fetch(`${desktopBaseURL}/api/category/list`, { headers: { 'Authorization': token} });
+                if(!responseCategory.ok) {
+                    if(responseCategory.status === 401) {
+                        await AsyncStorage.removeItem('access_token');
+                        Alert.alert('Atenção', 'Sua sessão expirou!');
+                        return router.replace('/login');
+                    }
+                    return Alert.alert('Atenção', 'Ocorreu um erro ao carregar os dados! Status: ');
+                }
+
+                const dataCategory = await responseCategory.json();
+                setCategoriesData(dataCategory);
+
+                const responseProducts = await fetch(`${desktopBaseURL}/api/product/list`, { headers: { 'Authorization': token} });
+                if(!responseProducts.ok) {
+                    if(responseProducts.status === 401) {
+                        await AsyncStorage.removeItem('access_token');
+                        Alert.alert('Atenção', 'Sua sessão expirou!');
+                        return router.replace('/login');
+                    }
+                    return Alert.alert('Atenção', 'Ocorreu um erro ao carregar os dados! Status: ');
+                }
+
+                const dataProducts = await responseProducts.json();
+                setFilteredProducts(dataProducts);
+                setAllProductsData(dataProducts);
+            } catch (error) {
+                return Alert.alert('Atenção', `Erro ao carregar os dados: ${error}`);
+            }
+       }
+
+       getDatas();
+    }, [])
+
+    const reloadProductList = (searchText: string = search) => {
+        const query = {
+            search: searchText,
+            category: Number(category),
+            subCategory: Number(subCategory)
+        }
+        
+        const filteredProducts = allProductsData.filter(product => {
+            if(query.search && !product.name.toLowerCase().includes(query.search.toLowerCase())) 
+                return false;
+
+            if(!isNaN(query.category) && query.category !== 0) 
+                if(product.category_id !== query.category) return false;
+            
+            if(!isNaN(query.subCategory) && query.subCategory !== 0) 
+                if(product.subcategory_id !== query.subCategory) return false;
+            
+        
+            return true;
+        });
+        setFilteredProducts(filteredProducts);
+    }
+    
+    useEffect(() => {
+        reloadProductList();
+    }, [category, subCategory, search])
+
+    const setOnChangeCategory = async (itemSelected: { _index: number; label: string; value: string }) => {
+        if(itemSelected.value === category) return;
+        setCategory(itemSelected.value);
+
+        const token = await AsyncStorage.getItem('access_token');
+        if(!token) {
+            await AsyncStorage.removeItem('access_token');
+            Alert.alert('Atenção', 'Sua sessão expirou!');
+            return router.replace('/login');
+        }
+        
+        try {
+            const responseSubCategory = await fetch(`${desktopBaseURL}/api/category/${itemSelected.value}/subcategories`, { headers: { 'Authorization': token } });
+            if(!responseSubCategory.ok) {
+                if(responseSubCategory.status === 401) {
+                    await AsyncStorage.removeItem('access_token');
+                    Alert.alert('Atenção', 'Sua sessão expirou!');
+                    return router.replace('/login');
+                }
+                return Alert.alert('Atenção', 'Ocorreu um erro ao carregar os dados! Status: ');
+            }
+
+            const dataSubCategory = await responseSubCategory.json();
+            setSubCategoriesData(dataSubCategory);
+        } catch (error) {
+            return Alert.alert('Atenção', `Erro ao carregar os dados: ${error}`);
+        }
+    }
+
+    const setOnChangeSubCategory = (itemSelected: { _index: number; label: string; value: string }) => {
+        if(itemSelected.value === subCategory) return;
+        setSubCategory(itemSelected.value);
+    }
 
     return (
         <ThemedView lightColor="#fff" darkColor="#0D0D12" style={styles.container}>
@@ -26,17 +129,32 @@ export default function ProductScreen() {
                 <View style={styles.headerCard}>
                     <View style={styles.searchFieldGroup}>
                         <ThemedText lightColor="#000" darkColor="#fff" style={{ fontWeight: 'bold' }}>Produtos</ThemedText>
-                        <TextInput style={styles.textInput} placeholder="Pesquisar..."></TextInput>  
+                        <TextInput
+                            style={styles.textInput} 
+                            placeholder="Pesquisar..." 
+                            value={search} onChangeText={(text) => {
+                                setSearch(text);
+                                reloadProductList(text);
+                            }}>
+                        </TextInput>  
                     </View>
                     <ThemedView style={styles.line} lightColor="#000" darkColor="#fff"></ThemedView>
                     <View style={styles.searchCategoryGroup}>
                         <View style={styles.categorySelectGroup}>
                             <ThemedText>Categoria:</ThemedText>
-                            <BasicDropdown data={data} value={category} setValue={setCategory}/>
+                            <BasicDropdown 
+                                data={[{ label: 'Todas', value: '0' }, ...categoriesData.map(category => { return { label: category.name, value: category.id.toString()}})]} 
+                                value={category} 
+                                setOnChange={setOnChangeCategory}
+                            />
                         </View>
                         <View style={styles.categorySelectGroup}>
                             <ThemedText>Sub-categoria:</ThemedText>
-                            <BasicDropdown data={data} value={subCategory} setValue={setSubCategory}/>
+                            <BasicDropdown 
+                                data={[{ label: 'Todas', value: '0' }, ...subCategoriesData.map(subcategory => { return { label: subcategory.name, value: subcategory.id.toString()}})]} 
+                                value={subCategory} 
+                                setOnChange={setOnChangeSubCategory}
+                            />
                         </View>
                     </View>
                 </View>
@@ -46,6 +164,18 @@ export default function ProductScreen() {
                         <ThemedText style={styles.labelListProduct}>Info.</ThemedText>
                         <ThemedText style={styles.labelListProduct}>Detalhes</ThemedText>
                     </ThemedView>
+                    <ScrollView style={styles.scrollListProduct} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
+                        {filteredProducts.map(product => {
+                            return <ItemProductList 
+                                name={product.name} 
+                                price={product.price} 
+                                sku={product.sku} 
+                                imageUrl={product.image_url} 
+                                id={product.id.toString()} 
+                                key={product.id} 
+                            />
+                        })}
+                    </ScrollView>
                 </View>
             </ThemedView>
         </ThemedView>
@@ -114,10 +244,10 @@ const styles = StyleSheet.create({
     listProducts: {
         width: "100%",
         height: "100%",
-        padding: 7,
         marginTop: 5
     },
     headerListProduct: {
+        marginHorizontal: 7,
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
@@ -131,5 +261,13 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
         fontSize: 22
+    },
+    scrollListProduct: {
+        marginTop: 7,
+        paddingHorizontal: 7,
+        width: "100%",
+        maxHeight: '72%',
+        overflowX: 'visible',
+        overflowY: 'scroll'
     }
 });

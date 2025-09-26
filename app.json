@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "chroma-stock-mobile-app",
-    "slug": "chroma-stock-mobile-app",
+    "name": "Chroma Stock",
+    "slug": "chroma-stock",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -37,6 +37,12 @@
           "dark": {
             "backgroundColor": "#000000"
           }
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "É necessário permitir o uso da caâmera para usar o leitor de QRCode ou Código de Barras! Deseja permitir?"
         }
       ]
     ],

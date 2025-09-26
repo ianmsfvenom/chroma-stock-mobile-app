@@ -1,16 +1,39 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { useState } from "react";
-import { StyleSheet, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
+import { Alert, StyleSheet, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useRouter } from "expo-router";
-
+import { desktopBaseURL } from "@/constants/url";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import fetch from 'node-fetch'
 
 export default function LoginScreen() {
     const theme = useColorScheme();
     const [showPassword, setShowPassword] = useState(false);
+    const [ email, setEmail ] = useState('');
+    const [ password, setPassword ] = useState('');
     const router = useRouter();
     
+    const makeLogin = async () => {
+        if(email === '' || password === '') return Alert.alert('Atenção', 'Preencha todos os campos!');
+
+        const requestLogin = await fetch(`${desktopBaseURL}/api/auth/login`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+
+        if(!requestLogin.ok) {
+            if(requestLogin.status === 401) return Alert.alert('Atenção', 'E-mail ou senha inválidos!');
+            else return Alert.alert('Atenção', 'Ocorreu um erro ao fazer o login! Status: ' + requestLogin.status);
+        }
+
+        const data = await requestLogin.json();
+        await AsyncStorage.setItem('access_token', `Bearer ${data.access_token}`);
+        router.replace('/(tabs)/product');
+    }
+
     return (
         <ThemedView style={[styles.container, theme === 'dark' ? styles.darkContainer : styles.lightContainer]}>
             <ThemedView style={[styles.cardLogin, theme === 'dark' ? styles.darkCardLogin : styles.lightCardLogin]}>
@@ -19,13 +42,13 @@ export default function LoginScreen() {
                 <View style={styles.formGroup}>
                     <View style={styles.inputGroup}>
                         <ThemedText style={[styles.label, theme === 'dark' ? styles.darkLabel : styles.lightLabel]}>E-mail:</ThemedText>
-                        <TextInput style={styles.textInput} placeholder="Seu E-mail" keyboardType="email-address"/>
+                        <TextInput style={styles.textInput} placeholder="Seu E-mail" keyboardType="email-address" value={email} onChangeText={setEmail}/>
                     </View>
                     <View style={styles.inputGroup}>
                         <ThemedText style={[styles.label, theme === 'dark' ? styles.darkLabel : styles.lightLabel]}>Senha:</ThemedText>
                         
                         <View style={styles.inputContainer}>
-                            <TextInput style={[styles.iconTextInput]} placeholder="Sua Senha" secureTextEntry={!showPassword}/>
+                            <TextInput style={[styles.iconTextInput]} placeholder="Sua Senha" secureTextEntry={!showPassword} value={password} onChangeText={setPassword}/>
                             <TouchableOpacity style={styles.icon} onPress={() => setShowPassword(!showPassword)}>
                                 <Icon name={showPassword ? "eye-off" : "eye"} size={22} color="#000000" />
                             </TouchableOpacity>
@@ -33,9 +56,7 @@ export default function LoginScreen() {
                     </View>
                 </View>
 
-                <TouchableOpacity style={styles.button} onPress={() => {
-                    router.replace('/(tabs)/product');
-                }}>
+                <TouchableOpacity style={styles.button} onPress={makeLogin}>
                     <ThemedText style={styles.buttonText}>Entrar</ThemedText>
                 </TouchableOpacity>
             </ThemedView>

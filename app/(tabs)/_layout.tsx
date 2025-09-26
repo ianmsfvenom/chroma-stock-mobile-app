@@ -4,8 +4,7 @@ import React from 'react';
 import { HapticTab } from '@/components/haptic-tab';
 import { Ionicons } from '@expo/vector-icons';
 import { Linking, TouchableOpacity } from 'react-native';
-import { ExternalLink } from '@/components/external-link';
-import { DesktopBaseURL } from '@/constants/url';
+import { desktopBaseURL } from '@/constants/url';
 
 export default function TabLayout() {
   return (
@@ -16,27 +15,25 @@ export default function TabLayout() {
         tabBarActiveTintColor: '#adadadff',
         tabBarInactiveTintColor: '#fff',
 
-        headerShown: true,
-        headerStyle: { backgroundColor: '#0869B9' },
-        headerTintColor: '#fff',
-
-        headerRight: () => (
-          <TouchableOpacity style={{ marginRight: 15 }} onPress={() => Linking.openURL(DesktopBaseURL)}>
-            <Ionicons size={28} name="desktop-outline" color="#fff" />
-          </TouchableOpacity>
-        ),
-
+        headerShown: false,
         tabBarButton: HapticTab,
       }}>
       <Tabs.Screen
-        name="product/index"
+        name="product"
         options={{
           title: 'Produto',
           tabBarIcon: ({ color }) => <Ionicons size={28} name="bag-outline" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="scanner/index"
+        name="box"
+        options={{
+          title: 'Caixa',
+          tabBarIcon: ({ color }) => <Ionicons size={28} name="cube-outline" color={color} />
+        }}
+      />;
+      <Tabs.Screen
+        name="scanner"
 
         options={{
           title: 'Scanner',
@@ -44,14 +41,14 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="movement/index"
+        name="movement"
         options={{
           title: 'Movimentação',
           tabBarIcon: ({ color }) => <Ionicons size={28} name="reload-outline" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="logout/index"
+        name="logout"
         options={{
           title: 'Logout',
           tabBarIcon: ({ color }) => <Ionicons size={28} name="log-out-outline" color={color} />,

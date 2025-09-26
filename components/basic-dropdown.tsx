@@ -5,12 +5,12 @@ import { Dropdown } from "react-native-element-dropdown";
 interface DropdownProps {
     data: { label: string; value: string }[];
     value: string;
-    setValue: (value: string) => void;
+    setOnChange: (value: { _index: number; label: string; value: string }) => void;
     placeholder?: string;
 }
 
 export default function BasicDropdown(props: DropdownProps) {
-    const { data, value, setValue, placeholder } = props;
+    const { data, value, setOnChange, placeholder } = props;
 
     return (
         <Dropdown
@@ -26,9 +26,7 @@ export default function BasicDropdown(props: DropdownProps) {
             valueField="value"
             placeholder={placeholder ?? 'Selecione...'}
             value={value}
-            onChange={item => {
-            setValue(item.value);
-            }}
+            onChange={setOnChange}
         />
     )
 }
@@ -65,7 +63,7 @@ const styles = StyleSheet.create({
     itemTextStyle: {
         fontSize: 14,
         fontWeight: 'bold',
-        lineHeight: 10,
+        lineHeight: 14,
         paddingVertical: 0,
         color: "#414141ff",
     },
