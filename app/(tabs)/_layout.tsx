@@ -31,10 +31,9 @@ export default function TabLayout() {
           title: 'Caixa',
           tabBarIcon: ({ color }) => <Ionicons size={28} name="cube-outline" color={color} />
         }}
-      />;
+      />
       <Tabs.Screen
         name="scanner"
-
         options={{
           title: 'Scanner',
           tabBarIcon: ({ color }) => <Ionicons size={28} name="qr-code-outline" color={color} />,

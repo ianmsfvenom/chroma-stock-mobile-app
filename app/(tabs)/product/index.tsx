@@ -3,12 +3,12 @@ import ItemProductList from "@/components/product/item-product-list";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { desktopBaseURL } from "@/constants/url";
+import { CategoryResponse, ProductListResponse, SubcategoryResponse } from "@/types/response";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
+import fetch from 'node-fetch';
 import { useEffect, useState } from "react";
 import { Alert, ScrollView, StyleSheet, TextInput, View } from "react-native";
-import fetch from 'node-fetch'
-import { router } from "expo-router";
-import { CategoryResponse, ProductResponse, SubcategoryResponse } from "@/types/response";
 
 export default function ProductScreen() {
     const [ category, setCategory ] = useState('');
@@ -16,8 +16,8 @@ export default function ProductScreen() {
     const [ categoriesData, setCategoriesData ] = useState<CategoryResponse[]>([]);
     const [ subCategoriesData, setSubCategoriesData ] = useState<SubcategoryResponse[]>([]);
     const [ search, setSearch ] = useState('');
-    const [ filteredProducts, setFilteredProducts ] = useState<ProductResponse[]>([]);
-    const [ allProductsData, setAllProductsData ] = useState<ProductResponse[]>([]);
+    const [ filteredProducts, setFilteredProducts ] = useState<ProductListResponse[]>([]);
+    const [ allProductsData, setAllProductsData ] = useState<ProductListResponse[]>([]);
     
     useEffect(() => {
        const getDatas = async () => {

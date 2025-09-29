@@ -33,7 +33,7 @@ export default function BasicDropdown(props: DropdownProps) {
 
 const styles = StyleSheet.create({
     dropdown: {
-      height: 30,
+      minHeight: 30,
       borderBottomColor: '#828282',
       borderBottomWidth: 1,
 

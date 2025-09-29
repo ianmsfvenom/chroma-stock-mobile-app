@@ -1,48 +1,49 @@
+import ItemBoxList from "@/components/box/item-box-list";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { desktopBaseURL } from "@/constants/url";
+import { BoxListResponse } from "@/types/response";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
-import { Alert, ScrollView } from "react-native";
 import fetch from 'node-fetch';
-import { StyleSheet, TextInput, View } from "react-native";
-import { BoxResponse } from "@/types/response";
-import ItemBoxList from "@/components/box/item-box-list";
+import { useEffect, useState } from "react";
+import { Alert, ScrollView, StyleSheet, TextInput, View } from "react-native";
 
+export let refreshBoxData: () => Promise<void>;
 
 export default function BoxScreen() {
     const [search, setSearch] = useState('');
-    const [boxesData, setBoxesData] = useState<BoxResponse[]>([]);
-    const [filteredBoxes, setFilteredBoxes] = useState<BoxResponse[]>([]);
+    const [boxesData, setBoxesData] = useState<BoxListResponse[]>([]);
+    const [filteredBoxes, setFilteredBoxes] = useState<BoxListResponse[]>([]);
+
+    refreshBoxData = async () => {
+        const token = await AsyncStorage.getItem('access_token');
+        if(!token) {
+            await AsyncStorage.removeItem('access_token');
+            Alert.alert('Atenção', 'Sua sessão expirou!');
+            return router.replace('/login');
+        }
+
+        try {
+            const response = await fetch(`${desktopBaseURL}/api/box/list`, { headers: { 'Authorization': token } });
+            if(!response.ok) {
+                if(response.status === 401) {
+                    await AsyncStorage.removeItem('access_token');
+                    Alert.alert('Atenção', 'Sua sessão expirou!');
+                    return router.replace('/login');
+                }
+                return Alert.alert('Atenção', 'Ocorreu um erro ao carregar os dados! Status: ');
+            }
+            const data = await response.json();
+            setBoxesData(data);
+            setFilteredBoxes(data);
+        } catch (error) {
+            return Alert.alert('Atenção', `Erro ao carregar os dados: ${error}`);
+        }
+    }
 
     useEffect(() => {
-        const loadBoxesData = async () => {
-            const token = await AsyncStorage.getItem('access_token');
-            if(!token) {
-                await AsyncStorage.removeItem('access_token');
-                Alert.alert('Atenção', 'Sua sessão expirou!');
-                return router.replace('/login');
-            }
-
-            try {
-                const response = await fetch(`${desktopBaseURL}/api/box/list`, { headers: { 'Authorization': token } });
-                if(!response.ok) {
-                    if(response.status === 401) {
-                        await AsyncStorage.removeItem('access_token');
-                        Alert.alert('Atenção', 'Sua sessão expirou!');
-                        return router.replace('/login');
-                    }
-                    return Alert.alert('Atenção', 'Ocorreu um erro ao carregar os dados! Status: ');
-                }
-                const data = await response.json();
-                setBoxesData(data);
-                setFilteredBoxes(data);
-            } catch (error) {
-                return Alert.alert('Atenção', `Erro ao carregar os dados: ${error}`);
-            }
-        }
-        loadBoxesData();
+        refreshBoxData();
     }, []);
 
     useEffect(() => {
@@ -52,7 +53,7 @@ export default function BoxScreen() {
 
     return (
         <ThemedView style={styles.container} lightColor="#fff" darkColor="#0D0D12">
-            <ThemedView style={styles.cardBoxes}>
+            <ThemedView style={styles.cardBoxes} lightColor="#f1f1f1ff" darkColor="#18181B">
                 <View style={styles.headerCard}>
                     <ThemedText lightColor="#000" darkColor="#fff" style={{ fontWeight: 'bold' }}>Caixas</ThemedText>
                     <TextInput
@@ -66,7 +67,7 @@ export default function BoxScreen() {
                     </TextInput>
                 </View>
                 <ThemedView lightColor="#fff" darkColor="#000" style={styles.line}/>
-                <ScrollView style={styles.boxList}>
+                <ScrollView style={styles.boxList} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
                     {filteredBoxes.map((box) => (
                         <ItemBoxList 
                             key={box.id} 
@@ -123,6 +124,7 @@ const styles = StyleSheet.create({
     boxList: {
         width: '100%',
         height: '80%',
-        marginTop: 10,
+        marginVertical: 10,
+        paddingHorizontal: 10
     }
 });

@@ -17,7 +17,7 @@ export default function BoxLayout() {
             }}
         >
             <Stack.Screen name="index" options={{ title: "Caixa" }} />
-            <Stack.Screen name="detail-box" options={{ title: "Detalhes da Caixa" }} />
+            <Stack.Screen name="details-box" options={{ title: "Detalhes da Caixa" }} />
         </Stack>
     );
 }

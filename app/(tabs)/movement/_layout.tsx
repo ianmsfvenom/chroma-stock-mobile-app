@@ -16,7 +16,7 @@ export default function MovementLayout() {
                 )
             }}
         >
-            <Stack.Screen name="index" options={{ title: "Scanner" }} />
+            <Stack.Screen name="index" options={{ title: "Movimentação" }} />
         </Stack>
     );
 }
