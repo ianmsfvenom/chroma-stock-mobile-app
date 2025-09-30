@@ -17,6 +17,8 @@ export default function MovementLayout() {
             }}
         >
             <Stack.Screen name="index" options={{ title: "Movimentação" }} />
+            <Stack.Screen name="details-box-movement" options={{ title: "Detalhes da Movimentação de Caixa" }} />
+            <Stack.Screen name="details-product-box-movement" options={{ title: "Detalhes da Movimentação de Produto" }} />
         </Stack>
     );
 }

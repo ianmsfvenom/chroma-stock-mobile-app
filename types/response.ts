@@ -161,3 +161,32 @@ export type LocationResponse = {
     created_at: string;
     updated_at: string;
 }
+
+export type ProductBoxMovementListResponse = {
+    id: number;
+    product_name: string;
+    product_id: number;
+    quantity: string;
+    movement_type: string;
+    origin_box_code: string | null;
+    origin_box_id: number | null;
+    destination_box_code: string | null;
+    destination_box_id: number | null;
+    author: string;
+    moved_at: string;
+}
+
+export type BoxMovementListResponse = {
+    id: number;
+    movement_type: string;
+    box_code: string;
+    box_id: string;
+    origin_deposit: string | null;
+    origin_location: string | null;
+    origin_location_id: number | null;
+    destination_deposit: string | null;
+    destination_location: string | null;
+    destination_location_id: number | null;
+    moved_at: string;
+    author: string;
+}

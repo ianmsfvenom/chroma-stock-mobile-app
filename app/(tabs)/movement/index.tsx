@@ -1,9 +1,54 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { ScrollView, StyleSheet, useColorScheme, View } from "react-native";
+import { desktopBaseURL } from "@/constants/url";
+import { BoxMovementListResponse, ProductBoxMovementListResponse } from "@/types/response";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
+import { Alert, ScrollView, StyleSheet, useColorScheme, View } from "react-native";
+import fetch from 'node-fetch';
+import ItemBoxMovementList from "@/components/movement/item-box-movement-list";
+import ItemProductBoxMovementList from "@/components/movement/item-product-box-movement-list";
 
 export default function MovementScreen() {
     const theme = useColorScheme();
+    const [ boxMovements, setBoxMovements ] = useState<BoxMovementListResponse[]>([]);
+    const [ productBoxMovement, setProductBoxMovement ] = useState<ProductBoxMovementListResponse[]>([]);
+    
+    useEffect(() => {
+        const loadMovements = async () => {
+            const token = await AsyncStorage.getItem('access_token');
+            if(!token) {
+                await AsyncStorage.removeItem('access_token');
+                Alert.alert('Atenção', 'Sua sessão expirou!');
+                return router.replace('/login');
+            }
+
+            try {
+                const resBoxMovement = await fetch(`${desktopBaseURL}/api/box-movement/list`, { headers: { 'Authorization': token } });
+                const resProductBoxMovement = await fetch(`${desktopBaseURL}/api/product-box-movement/list`, { headers: { 'Authorization': token } });
+
+                if(!resBoxMovement.ok || !resProductBoxMovement.ok) {
+                    if(resBoxMovement.status === 401 || resProductBoxMovement.status === 401) {
+                        await AsyncStorage.removeItem('access_token');
+                        Alert.alert('Atenção', 'Sua sessão expirou!');
+                        return router.replace('/login');
+                    }
+                    return Alert.alert('Atenção', 'Ocorreu um erro ao carregar os dados! Status: ' + resBoxMovement.status);
+                }
+
+                const dataBoxMovement: BoxMovementListResponse[] = await resBoxMovement.json();
+                const dataProductBoxMovement: ProductBoxMovementListResponse[] = await resProductBoxMovement.json();
+
+                setBoxMovements(dataBoxMovement);
+                setProductBoxMovement(dataProductBoxMovement);
+            } catch (error) {
+                console.log(error);
+                return Alert.alert('Atenção', `Erro ao carregar os dados: ${error}`);
+            }
+        }
+        loadMovements();
+    })
 
     return (
         <ThemedView lightColor="#fff" darkColor="#0D0D12" style={styles.container}>
@@ -16,7 +61,9 @@ export default function MovementScreen() {
                     style={styles.cardMovementScroll}
                     contentContainerStyle={styles.cardMovementScrollContent}
                 >
-                    
+                    {productBoxMovement.map((productBoxMovement, index) => (
+                        <ItemProductBoxMovementList key={index} productBoxMovement={productBoxMovement} />
+                    ))}
                 </ScrollView>
             </ThemedView>
             <ThemedView lightColor="#f1f1f1ff" darkColor="#18181B" style={styles.cardMovement}>
@@ -28,7 +75,9 @@ export default function MovementScreen() {
                     style={styles.cardMovementScroll}
                     contentContainerStyle={styles.cardMovementScrollContent}
                 >
-
+                {boxMovements.map((boxMovement, index) => (
+                    <ItemBoxMovementList key={index} boxMovement={boxMovement} />
+                ))}
                 </ScrollView>
             </ThemedView>
         </ThemedView>
@@ -58,7 +107,8 @@ const styles = StyleSheet.create({
         padding: 10
     },
     cardMovementScroll: {
-
+        width: "100%",
+        height: "100%"
     },
     cardMovementScrollContent: {
         padding: 15
