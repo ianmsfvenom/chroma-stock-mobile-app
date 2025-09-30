@@ -6,9 +6,9 @@ import { BoxDetailsResponse, CreateProductBoxMovementResponse, ProductInBoxDetai
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-import fetch from 'node-fetch';
 import { useEffect, useState } from "react";
 import { Alert, Modal, StyleSheet, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
+;
 
 interface RemoveProductInBoxProps {
     visible: boolean;

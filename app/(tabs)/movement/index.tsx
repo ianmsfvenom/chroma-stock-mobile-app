@@ -1,3 +1,5 @@
+import ItemBoxMovementList from "@/components/movement/item-box-movement-list";
+import ItemProductBoxMovementList from "@/components/movement/item-product-box-movement-list";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { desktopBaseURL } from "@/constants/url";
@@ -5,10 +7,7 @@ import { BoxMovementListResponse, ProductBoxMovementListResponse } from "@/types
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Alert, ScrollView, StyleSheet, useColorScheme, View } from "react-native";
-import fetch from 'node-fetch';
-import ItemBoxMovementList from "@/components/movement/item-box-movement-list";
-import ItemProductBoxMovementList from "@/components/movement/item-product-box-movement-list";
+import { Alert, ScrollView, StyleSheet, useColorScheme } from "react-native";
 
 export default function MovementScreen() {
     const theme = useColorScheme();
@@ -43,12 +42,11 @@ export default function MovementScreen() {
                 setBoxMovements(dataBoxMovement);
                 setProductBoxMovement(dataProductBoxMovement);
             } catch (error) {
-                console.log(error);
                 return Alert.alert('Atenção', `Erro ao carregar os dados: ${error}`);
             }
         }
         loadMovements();
-    })
+    }, []);
 
     return (
         <ThemedView lightColor="#fff" darkColor="#0D0D12" style={styles.container}>
@@ -107,11 +105,12 @@ const styles = StyleSheet.create({
         padding: 10
     },
     cardMovementScroll: {
-        width: "100%",
-        height: "100%"
+        paddingHorizontal: 10,
+        marginVertical: 10
     },
     cardMovementScrollContent: {
-        padding: 15
+        gap: 15,
+        paddingVertical: 10
     },
     line: {
         height: 1,

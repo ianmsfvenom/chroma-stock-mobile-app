@@ -1,11 +1,15 @@
 
+import { LoadingScren } from '@/components/scanner/modals/loading-screen';
 import OverlayBarcode from '@/components/scanner/overlay-barcode';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { desktopBaseURL } from '@/constants/url';
+import { ProductListResponse } from '@/types/response';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CameraView} from 'expo-camera';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { Alert, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
 
 
 const CAMERA_WIDTH = 300
@@ -14,14 +18,67 @@ const CAMERA_HEIGHT = 200
 export default function BarcodeScanner() {
     const theme = useColorScheme()
     const [ scanned, setScanned ] = useState(false);
+    const [ loading, setLoading ] = useState(false);
 
+    const onScanned = async (data: string) => {
+        setScanned(true);
+        setLoading(true);
+
+        const token = await AsyncStorage.getItem('access_token');
+        if (!token) {
+            await AsyncStorage.removeItem('access_token');
+            Alert.alert('Atenção', 'Sua sessão expirou!');
+            setLoading(false);
+            setScanned(false);
+            return router.replace('/login');
+        };
+
+        try {
+            const resSearchProduct = await fetch(`${desktopBaseURL}/api/product/search-by-barcode/${data}`, { headers: { 'Authorization': token } });
+            if (!resSearchProduct.ok) {
+                if (resSearchProduct.status === 401) {
+                    await AsyncStorage.removeItem('access_token');
+                    Alert.alert('Atenção', 'Sua sessão expirou!');
+                    setLoading(false);
+                    setScanned(false);
+                    return router.replace('/login');
+                }
+                setLoading(false);
+                return Alert.alert('Atenção', 'Ocorreu um erro ao pesquisar o produto! Status: ' + resSearchProduct.status, [{
+                    text: 'OK',
+                    onPress: () => setScanned(false)
+                }]);
+            }
+            const dataSearchProduct: ProductListResponse = await resSearchProduct.json();
+            setLoading(false);
+            router.replace({
+                pathname: '/(tabs)/product/details-product',
+                params: { id: dataSearchProduct.id }
+            });
+            
+            setTimeout(() => {
+                setScanned(false);
+            }, 1000);
+
+        } catch (error) {
+            setLoading(false);
+            Alert.alert('Atenção', `Erro ao pesquisar o produto: ${error}`, [{
+                text: 'OK',
+                onPress: () => setScanned(false)
+            }]);
+        }
+    };
     return (
         <ThemedView lightColor="#fff" darkColor="#0D0D12" style={styles.container}>
+            <LoadingScren visible={loading} setVisible={setLoading} />
+
             <View style={styles.cameraGroup}>
                 <ThemedText style={styles.cameraLabel}>Alinhe o código de barras dentro da moldura</ThemedText>
                 <CameraView 
                     style={styles.viewCamera} 
-                    onBarcodeScanned={({ data }) => { console.log(data); setScanned(true) }}
+                    onBarcodeScanned={({ data }) => {
+                        if(!scanned) onScanned(data);
+                    }}
                     barcodeScannerSettings={{ barcodeTypes: [ 'ean13', 'ean8' ] }}
                 >
                     <OverlayBarcode />

@@ -6,7 +6,6 @@ import { desktopBaseURL } from "@/constants/url";
 import { CategoryResponse, ProductListResponse, SubcategoryResponse } from "@/types/response";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-import fetch from 'node-fetch';
 import { useEffect, useState } from "react";
 import { Alert, ScrollView, StyleSheet, TextInput, View } from "react-native";
 

@@ -1,12 +1,11 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { useState } from "react";
-import { Alert, StyleSheet, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
-import Icon from 'react-native-vector-icons/Ionicons';
-import { useRouter } from "expo-router";
 import { desktopBaseURL } from "@/constants/url";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import fetch from 'node-fetch'
+import { useRouter } from "expo-router";
+import { useState } from "react";
+import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function LoginScreen() {
     const theme = useColorScheme();

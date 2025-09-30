@@ -6,7 +6,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, Image, ScrollView, StyleSheet, TouchableOpacity, useColorScheme, View } from "react-native";
-import fetch from 'node-fetch'
 import { Ionicons } from "@expo/vector-icons";
 
 export default function DetailsProductScreen() {
@@ -30,8 +29,6 @@ export default function DetailsProductScreen() {
                     return Alert.alert('Atenção', 'Ocorreu um erro ao carregar os dados! Status: ' + response.status);
                 }
                 const data: ProductDetailsResponse = await response.json();
-                console.log(data);
-                
                 setProduct(data);
             } catch (error) {
                 return Alert.alert('Atenção', `Erro ao carregar os detalhes do produto: ${error}`);
@@ -39,7 +36,7 @@ export default function DetailsProductScreen() {
         }
 
         getProductDetails();
-    }, [])
+    }, [id]);
 
     return (
         <ThemedView lightColor="#fff" darkColor="#0D0D12" style={styles.container}>
@@ -53,40 +50,46 @@ export default function DetailsProductScreen() {
                 </View>
                 <ScrollView style={styles.infoDetails} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                     <ThemedText>
-                        <ThemedText style={{ fontWeight: 'bold' }}>Preço: </ThemedText>
-                        R${product?.price.toString().replace('.', ',')}
+                        Preço:
+                        <ThemedText style={{ fontWeight: 'bold' }}> R${product?.price.toString().replace('.', ',')}</ThemedText>
                     </ThemedText>
                     <ThemedText>
-                        <ThemedText style={{ fontWeight: 'bold' }}>Código de Barras: </ThemedText>
-                        {product?.barcode}
+                        Código de Barras:
+                        <ThemedText style={{ fontWeight: 'bold' }}> {product?.barcode}</ThemedText>
                     </ThemedText>
                     <ThemedText>
-                        <ThemedText style={{ fontWeight: 'bold' }}>Categoria: </ThemedText>
-                        {product?.category}
+                        Categoria:
+                        <ThemedText style={{ fontWeight: 'bold' }}> {product?.category}</ThemedText>
                     </ThemedText>
                     <ThemedText>
-                        <ThemedText style={{ fontWeight: 'bold' }}>Subcategoria: </ThemedText>
-                        {product?.subcategory}
+                        Subcategoria:
+                        <ThemedText style={{ fontWeight: 'bold' }}> {product?.subcategory}</ThemedText>
                     </ThemedText>
                     <ThemedText>
-                        <ThemedText style={{ fontWeight: 'bold' }}>SKU: </ThemedText>
-                        {product?.sku}
+                        SKU:
+                        <ThemedText style={{ fontWeight: 'bold' }}> {product?.sku}</ThemedText>
                     </ThemedText>
                     <ThemedText>
-                        <ThemedText style={{ fontWeight: 'bold' }}>Min. Estoque: </ThemedText>
-                        {product?.min_stock}
+                        Min. Estoque:
+                        <ThemedText style={{ fontWeight: 'bold' }}> {product?.min_stock}</ThemedText>
                     </ThemedText>
                     <ThemedText>
-                        <ThemedText style={{ fontWeight: 'bold' }}>Status: </ThemedText>
-                        {product?.status_stock}
+                        Status:
+                        <ThemedText style={{ fontWeight: 'bold' }}>
+                            {
+                                product?.status_stock === 'Available' ? ' Disponível' : 
+                                product?.status_stock === 'Low stock' ? ' Baixo estoque' :
+                                ' Sem estoque'
+                            }
+                        </ThemedText>
                     </ThemedText>
                     <ThemedText>
-                        <ThemedText style={{ fontWeight: 'bold' }}>Quantidade: </ThemedText>
-                        {product?.total_quantity}
+                        Quantidade:
+                        <ThemedText style={{ fontWeight: 'bold' }}> {product?.total_quantity}</ThemedText>
                     </ThemedText>
                     <ThemedText>
-                        <ThemedText style={{ fontWeight: 'bold' }}>Observação: </ThemedText>
-                        {product?.obs}
+                        Observação:
+                        <ThemedText style={{ fontWeight: 'bold' }}> {product?.obs}</ThemedText>
                     </ThemedText>
                 </ScrollView>
             </ThemedView>

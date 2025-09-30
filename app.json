@@ -19,7 +19,12 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.anonymous.chromastock"
     },
     "web": {
       "output": "static",
@@ -54,6 +59,12 @@
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#0084ff"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "ef20edf7-d853-48bd-84cb-aa922926632c"
+      }
     }
   }
 }

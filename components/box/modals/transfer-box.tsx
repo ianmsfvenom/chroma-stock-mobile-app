@@ -55,7 +55,7 @@ export default function TransferBox(props: TransferBoxProps) {
                         Alert.alert('Atenção', 'Sua sessão expirou!');
                         return router.replace('/login');
                     }
-                    Alert.alert('Atenção', 'Erro ao carregar depoSitos! Status: ' + resDepositList.status);
+                    Alert.alert('Atenção', 'Erro ao carregar dados do depósito! Status: ' + resDepositList.status);
                 }
                 const dataDepositList: DepositResponse[] = await resDepositList.json();
                 setDepositData(dataDepositList);
@@ -72,7 +72,7 @@ export default function TransferBox(props: TransferBoxProps) {
                 const dataLocationList: LocationResponse[] = await resLocationList.json();
                 setLocationData(dataLocationList);
             } catch (error) {
-                console.log(error);
+                Alert.alert('Atenção', 'Erro ao carregar dados do depósito!');
             }
         }
 
