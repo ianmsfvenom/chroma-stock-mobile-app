@@ -24,8 +24,9 @@ export default function DetailsProductScreen() {
                 if(!response.ok) {
                     if(response.status === 401) {
                         await AsyncStorage.removeItem('access_token');
-                        Alert.alert('Atenção', 'Sua sessão expirou!');
-                        return router.replace('/login');
+                        return Alert.alert('Atenção', 'Sua sessão expirou!', 
+                            [{ text: 'OK', onPress: () => router.replace('/login') }]
+                        );
                     }
                     return Alert.alert('Atenção', 'Ocorreu um erro ao carregar os dados! Status: ' + response.status);
                 }

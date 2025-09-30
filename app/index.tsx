@@ -17,11 +17,13 @@ export default function Index() {
 
             if (requestCheckToken.ok) return router.replace('/(tabs)/product');
             await AsyncStorage.removeItem('access_token');
-            Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente! Status: ' + requestCheckToken.status);
-            return router.replace('/login');
+            Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente! Status: ' + requestCheckToken.status,
+                [{ text: 'OK', onPress: () => router.replace('/login') }]
+            );
         } catch (error) {
-            Alert.alert('Atenção', `Houve falha ao verficar o login! Tente novamente mais tarde! Erro: ${error}`);
-            return router.replace('/login');
+            Alert.alert('Atenção', `Houve falha ao verficar o login! Tente novamente mais tarde! Erro: ${error}`,
+                [{ text: 'OK', onPress: () => router.replace('/login') }]
+            );
         }
     }
 

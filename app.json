@@ -63,8 +63,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "ef20edf7-d853-48bd-84cb-aa922926632c"
+        "projectId": "33e33a29-38bf-4db6-8738-589eb6d71a5b"
       }
-    }
+    },
+    "owner": "ianpablo2005"
   }
 }

@@ -38,10 +38,11 @@ export default function QRCodeScanner() {
             if (!resSearchBox.ok) {
                 if (resSearchBox.status === 401) {
                     await AsyncStorage.removeItem('access_token');
-                    Alert.alert('Atenção', 'Sua sessão expirou!');
                     setLoading(false);
                     setScanned(false);
-                    return router.replace('/login');
+                    return Alert.alert('Atenção', 'Sua sessão expirou!', 
+                        [{ text: 'OK', onPress: () => router.replace('/login') }]
+                    );
                 }
                 setLoading(false);
                 return Alert.alert('Atenção', 'Ocorreu um erro ao pesquisar a caixa! Status: ' + resSearchBox.status, [{
