@@ -17,16 +17,13 @@ export default function BoxScreen() {
 
     refreshBoxData = async () => {
         const token = await AsyncStorage.getItem('access_token');
-        if(!token) {
-            await AsyncStorage.removeItem('access_token');
-            Alert.alert('Atenção', 'Sua sessão expirou!');
-            return router.replace('/login');
-        }
+        if (!token)
+            return Alert.alert('Atenção', 'Sua sessão expirou!', [{ text: 'OK', onPress: () => router.replace('/login') }]);
 
         try {
             const response = await fetch(`${desktopBaseURL}/api/box/list`, { headers: { 'Authorization': token } });
-            if(!response.ok) {
-                if(response.status === 401) {
+            if (!response.ok) {
+                if (response.status === 401) {
                     await AsyncStorage.removeItem('access_token');
                     Alert.alert('Atenção', 'Sua sessão expirou!');
                     return router.replace('/login');
@@ -58,23 +55,23 @@ export default function BoxScreen() {
                     <TextInput
                         style={styles.textInput}
                         placeholder="Pesquisar..."
-                        value={search} 
+                        value={search}
                         onChangeText={(text) => {
                             setSearch(text);
                         }}
                     >
                     </TextInput>
                 </View>
-                <ThemedView lightColor="#fff" darkColor="#000" style={styles.line}/>
+                <ThemedView lightColor="#fff" darkColor="#000" style={styles.line} />
                 <ScrollView style={styles.boxList} showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
                     {filteredBoxes.map((box) => (
-                        <ItemBoxList 
-                            key={box.id} 
-                            id={box.id} 
-                            code={box.code} 
-                            typeBox={box.type_box} 
-                            status={box.status} 
-                            actual_deposit={box.actual_deposit} 
+                        <ItemBoxList
+                            key={box.id}
+                            id={box.id}
+                            code={box.code}
+                            typeBox={box.type_box}
+                            status={box.status}
+                            actual_deposit={box.actual_deposit}
                             actual_location={box.actual_location}
                         />
                     ))}

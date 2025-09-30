@@ -21,7 +21,7 @@ export default function Index() {
             Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente! Status: ' + requestCheckToken.status);
             return router.replace('/login');
         } catch (error) {
-            Alert.alert('Atenção', `Houve falha ao verficar o login`);
+            Alert.alert('Atenção', `Houve falha ao verficar o login! Tente novamente mais tarde! Erro: ${error}`);
             return router.replace('/login');
         }
     }

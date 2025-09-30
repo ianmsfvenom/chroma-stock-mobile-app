@@ -36,11 +36,9 @@ export default function DetailsBoxScreen() {
     useEffect(() => {
         const getBoxDetails = async () => {
             const token = await AsyncStorage.getItem('access_token');
-            if (!token) {
-                await AsyncStorage.removeItem('access_token');
-                Alert.alert('Atenção', 'Sua sessão expirou!');
-                return router.replace('/login');
-            };
+            if (!token) 
+                return Alert.alert('Atenção', 'Sua sessão expirou!', [{ text: 'OK', onPress: () => router.replace('/login') }]);
+            
             try {
                 const response = await fetch(`${desktopBaseURL}/api/box/details/${id}`, { headers: { 'Authorization': token } });
                 if (!response.ok) {

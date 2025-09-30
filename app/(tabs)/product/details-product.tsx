@@ -16,8 +16,9 @@ export default function DetailsProductScreen() {
     useEffect(() => {
         const getProductDetails = async () => {
             const token = await AsyncStorage.getItem('access_token');
-            if(!token) return;
-
+            if (!token) 
+                return Alert.alert('Atenção', 'Sua sessão expirou!', [{ text: 'OK', onPress: () => router.replace('/login') }]);
+            
             try {
                 const response = await fetch(`${desktopBaseURL}/api/product/details/${id}`, { headers: { 'Authorization': token } });
                 if(!response.ok) {

@@ -17,11 +17,9 @@ export default function MovementScreen() {
     useEffect(() => {
         const loadMovements = async () => {
             const token = await AsyncStorage.getItem('access_token');
-            if(!token) {
-                await AsyncStorage.removeItem('access_token');
-                Alert.alert('Atenção', 'Sua sessão expirou!');
-                return router.replace('/login');
-            }
+            if (!token) 
+                return Alert.alert('Atenção', 'Sua sessão expirou!', [{ text: 'OK', onPress: () => router.replace('/login') }]);
+            
 
             try {
                 const resBoxMovement = await fetch(`${desktopBaseURL}/api/box-movement/list`, { headers: { 'Authorization': token } });

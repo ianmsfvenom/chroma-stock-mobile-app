@@ -26,11 +26,12 @@ export default function BarcodeScanner() {
 
         const token = await AsyncStorage.getItem('access_token');
         if (!token) {
-            await AsyncStorage.removeItem('access_token');
-            Alert.alert('Atenção', 'Sua sessão expirou!');
             setLoading(false);
             setScanned(false);
-            return router.replace('/login');
+            return Alert.alert('Atenção', 'Sua sessão expirou!', [{
+                text: 'OK',
+                onPress: () => router.replace('/login')
+            }])
         };
 
         try {

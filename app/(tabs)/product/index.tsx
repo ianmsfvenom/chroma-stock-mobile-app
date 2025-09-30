@@ -21,11 +21,9 @@ export default function ProductScreen() {
     useEffect(() => {
        const getDatas = async () => {
             const token = await AsyncStorage.getItem('access_token');
-            if(!token) {
-                await AsyncStorage.removeItem('access_token');
-                Alert.alert('Atenção', 'Sua sessão expirou!');
-                return router.replace('/login');
-            }
+            if (!token) 
+                return Alert.alert('Atenção', 'Sua sessão expirou!', [{ text: 'OK', onPress: () => router.replace('/login') }]);
+            
             try {
                 const responseCategory = await fetch(`${desktopBaseURL}/api/category/list`, { headers: { 'Authorization': token} });
                 if(!responseCategory.ok) {
