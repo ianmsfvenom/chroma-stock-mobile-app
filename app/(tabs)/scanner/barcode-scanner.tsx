@@ -28,7 +28,7 @@ export default function BarcodeScanner() {
         if (!token) {
             setLoading(false);
             setScanned(false);
-            return Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!', [{
+            return Alert.alert('Atenção', 'Credenciais não encontradas! Faça login novamente!', [{
                 text: 'OK',
                 onPress: () => router.replace('/login')
             }])

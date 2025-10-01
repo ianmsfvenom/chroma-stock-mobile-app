@@ -21,7 +21,7 @@ export default function Index() {
                 [{ text: 'OK', onPress: () => router.replace('/login') }]
             );
         } catch (error) {
-            Alert.alert('Atenção', `Houve falha ao verficar o login! Tente novamente mais tarde! Erro: ${error}`,
+            Alert.alert('Atenção', `Houve falha ao verficar o login! Tente novamente mais tarde!\n\nErro: ${error}`,
                 [{ text: 'OK', onPress: () => router.replace('/login') }]
             );
         }

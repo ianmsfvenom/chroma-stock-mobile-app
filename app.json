@@ -49,6 +49,14 @@
         {
           "cameraPermission": "É necessário permitir o uso da caâmera para usar o leitor de QRCode ou Código de Barras! Deseja permitir?"
         }
+      ],
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
       ]
     ],
     "experiments": {

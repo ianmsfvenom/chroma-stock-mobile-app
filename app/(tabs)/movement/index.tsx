@@ -18,7 +18,9 @@ export default function MovementScreen() {
         const loadMovements = async () => {
             const token = await AsyncStorage.getItem('access_token');
             if (!token) 
-                return Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!', [{ text: 'OK', onPress: () => router.replace('/login') }]);
+                return Alert.alert('Atenção', 'Credenciais não encontradas2! Faça login novamente!', 
+                    [{ text: 'OK', onPress: () => router.replace('/login') }]
+                );
 
             try {
                 const resBoxMovement = await fetch(`${desktopBaseURL}/api/box-movement/list`, { headers: { 'Authorization': token } });
@@ -40,7 +42,7 @@ export default function MovementScreen() {
                 setBoxMovements(dataBoxMovement);
                 setProductBoxMovement(dataProductBoxMovement);
             } catch (error) {
-                return Alert.alert('Atenção', `Erro ao carregar os dados: ${error}`);
+                return Alert.alert('Atenção', `Erro ao carregar as movimentações: ${error}`);
             }
         }
         loadMovements();

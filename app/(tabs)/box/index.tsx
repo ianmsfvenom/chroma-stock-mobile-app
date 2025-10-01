@@ -18,7 +18,7 @@ export default function BoxScreen() {
     refreshBoxData = async () => {
         const token = await AsyncStorage.getItem('access_token');
         if (!token)
-            return Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!', [{ text: 'OK', onPress: () => router.replace('/login') }]);
+            return Alert.alert('Atenção', 'Credenciais não encontradas! Faça login novamente!', [{ text: 'OK', onPress: () => router.replace('/login') }]);
 
         try {
             const response = await fetch(`${desktopBaseURL}/api/box/list`, { headers: { 'Authorization': token } });
@@ -29,13 +29,13 @@ export default function BoxScreen() {
                         [{ text: 'OK', onPress: () => router.replace('/login') }]
                     );
                 }
-                return Alert.alert('Atenção', 'Ocorreu um erro ao carregar os dados! Status: ');
+                return Alert.alert('Atenção', 'Ocorreu um erro ao carregar os dados das caixas!\n\nStatus: ' + response.status);
             }
             const data = await response.json();
             setBoxesData(data);
             setFilteredBoxes(data);
         } catch (error) {
-            return Alert.alert('Atenção', `Erro ao carregar os dados: ${error}`);
+            return Alert.alert('Atenção', `Erro ao carregar dados das caixas: ${error}`);
         }
     }
 

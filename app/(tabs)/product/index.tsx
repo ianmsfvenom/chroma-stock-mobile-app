@@ -22,7 +22,9 @@ export default function ProductScreen() {
        const getDatas = async () => {
             const token = await AsyncStorage.getItem('access_token');
             if (!token) 
-                return Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!', [{ text: 'OK', onPress: () => router.replace('/login') }]);
+                return Alert.alert('Atenção', 'Credenciais não encontradas3! Faça login novamente!', 
+                    [{ text: 'OK', onPress: () => router.replace('/login') }]
+                );
             
             try {
                 const responseCategory = await fetch(`${desktopBaseURL}/api/category/list`, { headers: { 'Authorization': token} });
@@ -46,14 +48,14 @@ export default function ProductScreen() {
                         Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
                         return router.replace('/login');
                     }
-                    return Alert.alert('Atenção', 'Ocorreu um erro ao carregar os dados! Status: ');
+                    return Alert.alert('Atenção', 'Ocorreu um erro ao carregar lista de produtos! Status: ' + responseProducts.status);
                 }
 
                 const dataProducts = await responseProducts.json();
                 setFilteredProducts(dataProducts);
                 setAllProductsData(dataProducts);
             } catch (error) {
-                return Alert.alert('Atenção', `Erro ao carregar os dados: ${error}`);
+                return Alert.alert('Atenção', `Erro ao carregar lista de produtos: ${error}`);
             }
        }
 
@@ -92,11 +94,10 @@ export default function ProductScreen() {
         setCategory(itemSelected.value);
 
         const token = await AsyncStorage.getItem('access_token');
-        if(!token) {
-            await AsyncStorage.removeItem('access_token');
-            Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
-            return router.replace('/login');
-        }
+        if(!token) 
+            return Alert.alert('Atenção', 'Credenciais não encontradas! Faça login novamente!', 
+                [{ text: 'OK', onPress: () => router.replace('/login') }]
+            );
         
         try {
             const responseSubCategory = await fetch(`${desktopBaseURL}/api/category/${itemSelected.value}/subcategories`, { headers: { 'Authorization': token } });
@@ -106,13 +107,13 @@ export default function ProductScreen() {
                     Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
                     return router.replace('/login');
                 }
-                return Alert.alert('Atenção', 'Ocorreu um erro ao carregar os dados! Status: ');
+                return Alert.alert('Atenção', 'Ocorreu um erro ao carregar subcategorias! Status: ' + responseSubCategory.status);
             }
 
             const dataSubCategory = await responseSubCategory.json();
             setSubCategoriesData(dataSubCategory);
         } catch (error) {
-            return Alert.alert('Atenção', `Erro ao carregar os dados: ${error}`);
+            return Alert.alert('Atenção', `Erro ao carregar subcategorias: ${error}`);
         }
     }
 
