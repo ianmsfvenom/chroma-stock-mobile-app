@@ -3,14 +3,12 @@ import BasicDropdown from "@/components/basic-dropdown";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { desktopBaseURL } from "@/constants/url";
-import { BoxDetailsResponse, BoxMovementBoxDetailsResponse, CreateBoxMovementResponse, DepositResponse, LocationResponse, ProductMovementsBoxDetailsResponse } from "@/types/response";
+import { BoxDetailsResponse, BoxMovementBoxDetailsResponse, CreateBoxMovementResponse, DepositResponse, LocationResponse } from "@/types/response";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Alert, TouchableOpacity, useColorScheme } from "react-native";
-import { StyleSheet, View } from "react-native";
-import { Modal } from "react-native";
+import { Alert, Modal, StyleSheet, TouchableOpacity, useColorScheme, View } from "react-native";
 
 interface ReturnBoxProps {
     box_id: string | string[];
@@ -46,7 +44,7 @@ export default function ReturnBox(props: ReturnBoxProps) {
             const token = await AsyncStorage.getItem('access_token');
             if (!token) {
                 await AsyncStorage.removeItem('access_token');
-                Alert.alert('Atenção', 'Sua sessão expirou!');
+                Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
                 return router.replace('/login');
             };
             try {
@@ -54,7 +52,7 @@ export default function ReturnBox(props: ReturnBoxProps) {
                 if (!resDepositList.ok) {
                     if (resDepositList.status === 401) {
                         await AsyncStorage.removeItem('access_token');
-                        Alert.alert('Atenção', 'Sua sessão expirou!');
+                        Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
                         return router.replace('/login');
                     };
                     Alert.alert('Atenção', 'Erro ao carregar depósitos! Status: ' + resDepositList.status);
@@ -66,7 +64,7 @@ export default function ReturnBox(props: ReturnBoxProps) {
                 if (!resLocationList.ok) {
                     if (resLocationList.status === 401) {
                         await AsyncStorage.removeItem('access_token');
-                        Alert.alert('Atenção', 'Sua sessão expirou!');
+                        Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
                         return router.replace('/login');
                     };
                     Alert.alert('Atenção', 'Erro ao carregar localizações! Status: ' + resDepositList.status);
@@ -92,7 +90,7 @@ export default function ReturnBox(props: ReturnBoxProps) {
         const token = await AsyncStorage.getItem('access_token');
         if (!token) {
             await AsyncStorage.removeItem('access_token');
-            Alert.alert('Atenção', 'Sua sessão expirou!');
+            Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
             setDepositId('');
             setLocationId('');
             setDisabledButton(false);
@@ -120,7 +118,7 @@ export default function ReturnBox(props: ReturnBoxProps) {
                 setVisible(false);
                 if (response.status === 401) {
                     await AsyncStorage.removeItem('access_token');
-                    Alert.alert('Atenção', 'Sua sessão expirou!');
+                    Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
                     return router.replace('/login');
                 }
                 return Alert.alert('Atenção', 'Ocorreu um erro ao retornar a caixa! Status: ' + response.status);

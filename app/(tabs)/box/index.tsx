@@ -18,14 +18,14 @@ export default function BoxScreen() {
     refreshBoxData = async () => {
         const token = await AsyncStorage.getItem('access_token');
         if (!token)
-            return Alert.alert('Atenção', 'Sua sessão expirou!', [{ text: 'OK', onPress: () => router.replace('/login') }]);
+            return Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!', [{ text: 'OK', onPress: () => router.replace('/login') }]);
 
         try {
             const response = await fetch(`${desktopBaseURL}/api/box/list`, { headers: { 'Authorization': token } });
             if (!response.ok) {
                 if (response.status === 401) {
                     await AsyncStorage.removeItem('access_token');
-                    return Alert.alert('Atenção', 'Sua sessão expirou!', 
+                    return Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!', 
                         [{ text: 'OK', onPress: () => router.replace('/login') }]
                     );
                 }

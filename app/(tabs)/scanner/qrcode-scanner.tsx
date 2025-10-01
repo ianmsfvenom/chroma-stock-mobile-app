@@ -5,11 +5,10 @@ import { ThemedView } from '@/components/themed-view';
 import { desktopBaseURL } from '@/constants/url';
 import { BoxListResponse } from '@/types/response';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CameraView} from 'expo-camera';
+import { CameraView } from 'expo-camera';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Alert } from 'react-native';
-import { StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { Alert, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
 
 const CAMERA_WIDTH = 300
 const CAMERA_HEIGHT = 300
@@ -27,7 +26,7 @@ export default function QRCodeScanner() {
         if (!token) {
             setLoading(false);
             setScanned(false);
-            return Alert.alert('Atenção', 'Sua sessão expirou!', [{
+            return Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!', [{
                 text: 'OK',
                 onPress: () => router.replace('/login')
             }])
@@ -40,7 +39,7 @@ export default function QRCodeScanner() {
                     await AsyncStorage.removeItem('access_token');
                     setLoading(false);
                     setScanned(false);
-                    return Alert.alert('Atenção', 'Sua sessão expirou!', 
+                    return Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!', 
                         [{ text: 'OK', onPress: () => router.replace('/login') }]
                     );
                 }

@@ -2,11 +2,11 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { desktopBaseURL } from "@/constants/url";
 import { ProductDetailsResponse } from "@/types/response";
+import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, Image, ScrollView, StyleSheet, TouchableOpacity, useColorScheme, View } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
 
 export default function DetailsProductScreen() {
     const theme = useColorScheme();
@@ -17,14 +17,14 @@ export default function DetailsProductScreen() {
         const getProductDetails = async () => {
             const token = await AsyncStorage.getItem('access_token');
             if (!token) 
-                return Alert.alert('Atenção', 'Sua sessão expirou!', [{ text: 'OK', onPress: () => router.replace('/login') }]);
+                return Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!', [{ text: 'OK', onPress: () => router.replace('/login') }]);
             
             try {
                 const response = await fetch(`${desktopBaseURL}/api/product/details/${id}`, { headers: { 'Authorization': token } });
                 if(!response.ok) {
                     if(response.status === 401) {
                         await AsyncStorage.removeItem('access_token');
-                        return Alert.alert('Atenção', 'Sua sessão expirou!', 
+                        return Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!', 
                             [{ text: 'OK', onPress: () => router.replace('/login') }]
                         );
                     }

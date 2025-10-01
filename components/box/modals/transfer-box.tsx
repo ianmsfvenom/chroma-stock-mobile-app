@@ -8,8 +8,7 @@ import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Alert } from "react-native";
-import { Modal, StyleSheet, TouchableOpacity, useColorScheme, View } from "react-native";
+import { Alert, Modal, StyleSheet, TouchableOpacity, useColorScheme, View } from "react-native";
 
 interface TransferBoxProps {
     box_id: string | string[];
@@ -44,7 +43,7 @@ export default function TransferBox(props: TransferBoxProps) {
             const token = await AsyncStorage.getItem('access_token');
             if (!token) {
                 await AsyncStorage.removeItem('access_token');
-                Alert.alert('Atenção', 'Sua sessão expirou!');
+                Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
                 return router.replace('/login');
             }
             try {
@@ -52,7 +51,7 @@ export default function TransferBox(props: TransferBoxProps) {
                 if (!resDepositList.ok) {
                     if (resDepositList.status === 401) {
                         await AsyncStorage.removeItem('access_token');
-                        Alert.alert('Atenção', 'Sua sessão expirou!');
+                        Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
                         return router.replace('/login');
                     }
                     Alert.alert('Atenção', 'Erro ao carregar dados do depósito! Status: ' + resDepositList.status);
@@ -64,7 +63,7 @@ export default function TransferBox(props: TransferBoxProps) {
                 if (!resLocationList.ok) {
                     if (resLocationList.status === 401) {
                         await AsyncStorage.removeItem('access_token');
-                        Alert.alert('Atenção', 'Sua sessão expirou!');
+                        Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
                         return router.replace('/login');
                     }
                     Alert.alert('Atenção', 'Erro ao carregar localizações! Status: ' + resDepositList.status);
@@ -90,7 +89,7 @@ export default function TransferBox(props: TransferBoxProps) {
         const token = await AsyncStorage.getItem('access_token');
         if (!token) {
             AsyncStorage.removeItem('access_token');
-            Alert.alert('Atenção', 'Sua sessão expirou!');
+            Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
             setDepositId('');
             setLocationId('');
             setDisabledButton(false);
@@ -118,7 +117,7 @@ export default function TransferBox(props: TransferBoxProps) {
                 setVisible(false);
                 if (response.status === 401) {
                     await AsyncStorage.removeItem('access_token');
-                    Alert.alert('Atenção', 'Sua sessão expirou!');
+                    Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
                     return router.replace('/login');
                 }
                 return Alert.alert('Atenção', `Erro ao retornar a caixa: ${response.status}`);

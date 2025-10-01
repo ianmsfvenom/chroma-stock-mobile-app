@@ -6,7 +6,7 @@ import { ThemedView } from '@/components/themed-view';
 import { desktopBaseURL } from '@/constants/url';
 import { ProductListResponse } from '@/types/response';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CameraView} from 'expo-camera';
+import { CameraView } from 'expo-camera';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import { Alert, StyleSheet, TouchableOpacity, useColorScheme, View } from 'react-native';
@@ -28,7 +28,7 @@ export default function BarcodeScanner() {
         if (!token) {
             setLoading(false);
             setScanned(false);
-            return Alert.alert('Atenção', 'Sua sessão expirou!', [{
+            return Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!', [{
                 text: 'OK',
                 onPress: () => router.replace('/login')
             }])
@@ -41,7 +41,7 @@ export default function BarcodeScanner() {
                     await AsyncStorage.removeItem('access_token');
                     setLoading(false);
                     setScanned(false);
-                    return Alert.alert('Atenção', 'Sua sessão expirou!', 
+                    return Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!', 
                         [{ text: 'OK', onPress: () => router.replace('/login') }]
                     );
                 }

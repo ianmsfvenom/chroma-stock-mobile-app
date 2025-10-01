@@ -22,14 +22,14 @@ export default function ProductScreen() {
        const getDatas = async () => {
             const token = await AsyncStorage.getItem('access_token');
             if (!token) 
-                return Alert.alert('Atenção', 'Sua sessão expirou!', [{ text: 'OK', onPress: () => router.replace('/login') }]);
+                return Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!', [{ text: 'OK', onPress: () => router.replace('/login') }]);
             
             try {
                 const responseCategory = await fetch(`${desktopBaseURL}/api/category/list`, { headers: { 'Authorization': token} });
                 if(!responseCategory.ok) {
                     if(responseCategory.status === 401) {
                         await AsyncStorage.removeItem('access_token');
-                        return Alert.alert('Atenção', 'Sua sessão expirou!', 
+                        return Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!', 
                             [{ text: 'OK', onPress: () => router.replace('/login') }]
                         );
                     }
@@ -43,7 +43,7 @@ export default function ProductScreen() {
                 if(!responseProducts.ok) {
                     if(responseProducts.status === 401) {
                         await AsyncStorage.removeItem('access_token');
-                        Alert.alert('Atenção', 'Sua sessão expirou!');
+                        Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
                         return router.replace('/login');
                     }
                     return Alert.alert('Atenção', 'Ocorreu um erro ao carregar os dados! Status: ');
@@ -94,7 +94,7 @@ export default function ProductScreen() {
         const token = await AsyncStorage.getItem('access_token');
         if(!token) {
             await AsyncStorage.removeItem('access_token');
-            Alert.alert('Atenção', 'Sua sessão expirou!');
+            Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
             return router.replace('/login');
         }
         
@@ -103,7 +103,7 @@ export default function ProductScreen() {
             if(!responseSubCategory.ok) {
                 if(responseSubCategory.status === 401) {
                     await AsyncStorage.removeItem('access_token');
-                    Alert.alert('Atenção', 'Sua sessão expirou!');
+                    Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
                     return router.replace('/login');
                 }
                 return Alert.alert('Atenção', 'Ocorreu um erro ao carregar os dados! Status: ');

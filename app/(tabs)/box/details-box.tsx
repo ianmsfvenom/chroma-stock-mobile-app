@@ -37,14 +37,14 @@ export default function DetailsBoxScreen() {
         const getBoxDetails = async () => {
             const token = await AsyncStorage.getItem('access_token');
             if (!token) 
-                return Alert.alert('Atenção', 'Sua sessão expirou!', [{ text: 'OK', onPress: () => router.replace('/login') }]);
+                return Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!', [{ text: 'OK', onPress: () => router.replace('/login') }]);
             
             try {
                 const response = await fetch(`${desktopBaseURL}/api/box/details/${id}`, { headers: { 'Authorization': token } });
                 if (!response.ok) {
                     if (response.status === 401) {
                         await AsyncStorage.removeItem('access_token');
-                        Alert.alert('Atenção', 'Sua sessão expirou!');
+                        Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
                         return router.replace('/login');
                     }
                     return Alert.alert('Atenção', 'Ocorreu um erro ao carregar os dados! Status: ' + response.status);
@@ -103,7 +103,7 @@ export default function DetailsBoxScreen() {
             onPress: async () => {
                 const token = await AsyncStorage.getItem('access_token');
                 if (!token) {
-                    Alert.alert('Atenção', 'Sua sessão expirou!');
+                    Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
                     return router.replace('/login');
                 }
                 const resRemoveBox = await fetch(`${desktopBaseURL}/api/box/box-movement/remove`, {
@@ -120,7 +120,7 @@ export default function DetailsBoxScreen() {
                 if(!resRemoveBox.ok) {
                     if(resRemoveBox.status === 401) {
                         await AsyncStorage.removeItem('access_token');
-                        return Alert.alert('Atenção', 'Sua sessão expirou!', 
+                        return Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!', 
                             [{ text: 'OK', onPress: () => router.replace('/login') }]
                         );
                     }

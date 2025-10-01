@@ -36,7 +36,7 @@ export default function RemoveProductInBox(props: RemoveProductInBoxProps) {
         const token = await AsyncStorage.getItem('access_token');
         if (!token) {
             await AsyncStorage.removeItem('access_token');
-            Alert.alert('Atenção', 'Sua sessão expirou!');
+            Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
             return router.replace('/login');
         };
         try {
@@ -44,7 +44,7 @@ export default function RemoveProductInBox(props: RemoveProductInBoxProps) {
             if (!response.ok) {
                 if (response.status === 401) {
                     await AsyncStorage.removeItem('access_token');
-                    Alert.alert('Atenção', 'Sua sessão expirou!');
+                    Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
                     return router.replace('/login');
                 }
                 return Alert.alert('Atenção', 'Ocorreu um erro ao remover o produto! Status: ' + response.status);
@@ -66,7 +66,7 @@ export default function RemoveProductInBox(props: RemoveProductInBoxProps) {
         const token = await AsyncStorage.getItem('access_token');
         if (!token) {
             AsyncStorage.removeItem('access_token');
-            Alert.alert('Atenção', 'Sua sessão expirou!');
+            Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
             setDisabledButton(false);
             setVisible(false);
             return router.replace('/login');
@@ -89,7 +89,7 @@ export default function RemoveProductInBox(props: RemoveProductInBoxProps) {
             if (!resRemoveProduct.ok) {
                 if (resRemoveProduct.status === 401) {
                     await AsyncStorage.removeItem('access_token');
-                    Alert.alert('Atenção', 'Sua sessão expirou!');
+                    Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
                     setDisabledButton(false);
                     setVisible(false);
                     return router.replace('/login');
