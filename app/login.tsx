@@ -4,7 +4,7 @@ import { desktopBaseURL } from "@/constants/url";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { useState } from "react";
-import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
+import { Alert, StyleSheet, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function LoginScreen() {
@@ -15,6 +15,7 @@ export default function LoginScreen() {
     const router = useRouter();
     
     const makeLogin = async () => {
+        Alert.alert('Aguarde', 'Fazendo login...Url: ' + desktopBaseURL);
         if(email === '' || password === '') return Alert.alert('Atenção', 'Preencha todos os campos!');
 
         const requestLogin = await fetch(`${desktopBaseURL}/api/auth/login`, {

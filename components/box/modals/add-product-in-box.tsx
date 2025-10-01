@@ -8,7 +8,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, Modal, StyleSheet, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
-;
 
 interface AddProductInBoxProps {
     visible: boolean;

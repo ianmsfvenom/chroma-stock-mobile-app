@@ -8,7 +8,6 @@ import TransferBox from "@/components/box/modals/transfer-box";
 import TransferProductInBox from "@/components/box/modals/transfer-product-in-box";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { desktopBaseURL } from "@/constants/url";
 import { BoxDetailsResponse, BoxMovementBoxDetailsResponse, CreateBoxMovementResponse, ProductInBoxDetailsResponse, ProductMovementsBoxDetailsResponse } from "@/types/response";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -16,6 +15,7 @@ import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Alert, ScrollView, StyleSheet, TouchableOpacity, useColorScheme, View } from "react-native";
 import { refreshBoxData } from ".";
+import { desktopBaseURL } from "@/constants/url";
 
 export default function DetailsBoxScreen() {
     const { id } = useLocalSearchParams();
