@@ -15,23 +15,25 @@ export default function LoginScreen() {
     const router = useRouter();
     
     const makeLogin = async () => {
-        Alert.alert('Aguarde', 'Fazendo login...Url: ' + desktopBaseURL);
         if(email === '' || password === '') return Alert.alert('Atenção', 'Preencha todos os campos!');
+        try {
+            const requestLogin = await fetch(`${desktopBaseURL}/api/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
 
-        const requestLogin = await fetch(`${desktopBaseURL}/api/auth/login`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
-        });
+            if(!requestLogin.ok) {
+                if(requestLogin.status === 401) return Alert.alert('Atenção', 'E-mail ou senha inválidos!');
+                else return Alert.alert('Atenção', 'Ocorreu um erro ao fazer o login! Status: ' + requestLogin.status);
+            }
 
-        if(!requestLogin.ok) {
-            if(requestLogin.status === 401) return Alert.alert('Atenção', 'E-mail ou senha inválidos!');
-            else return Alert.alert('Atenção', 'Ocorreu um erro ao fazer o login! Status: ' + requestLogin.status);
+            const data = await requestLogin.json();
+            await AsyncStorage.setItem('access_token', `Bearer ${data.access_token}`);
+            router.replace('/(tabs)/product');
+        } catch (error) {
+            Alert.alert('Erro', 'Ocorreu um erro ao fazer o login! ' + error);
         }
-
-        const data = await requestLogin.json();
-        await AsyncStorage.setItem('access_token', `Bearer ${data.access_token}`);
-        router.replace('/(tabs)/product');
     }
 
     return (

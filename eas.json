@@ -10,6 +10,9 @@
       "environment": "development",
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "http://192.168.1.13:8000"
       }
     },
     "preview": {
@@ -23,7 +26,10 @@
       }
     },
     "production": {
-      "autoIncrement": true
+      "autoIncrement": true,
+      "env": {
+        "EXPO_PUBLIC_API_URL": "http://192.168.1.13:8000"
+      }
     }
   },
   "submit": {
