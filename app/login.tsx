@@ -41,13 +41,13 @@ export default function LoginScreen() {
                 <View style={styles.formGroup}>
                     <View style={styles.inputGroup}>
                         <ThemedText style={[styles.label, theme === 'dark' ? styles.darkLabel : styles.lightLabel]}>E-mail:</ThemedText>
-                        <TextInput style={styles.textInput} placeholder="Seu E-mail" keyboardType="email-address" value={email} onChangeText={setEmail}/>
+                        <TextInput style={styles.textInput} placeholderTextColor="#8C8787" placeholder="Seu E-mail" keyboardType="email-address" value={email} onChangeText={setEmail}/>
                     </View>
                     <View style={styles.inputGroup}>
                         <ThemedText style={[styles.label, theme === 'dark' ? styles.darkLabel : styles.lightLabel]}>Senha:</ThemedText>
                         
                         <View style={styles.inputContainer}>
-                            <TextInput style={[styles.iconTextInput]} placeholder="Sua Senha" secureTextEntry={!showPassword} value={password} onChangeText={setPassword}/>
+                            <TextInput style={[styles.iconTextInput]} placeholderTextColor="#8C8787" placeholder="Sua Senha" secureTextEntry={!showPassword} value={password} onChangeText={setPassword}/>
                             <TouchableOpacity style={styles.icon} onPress={() => setShowPassword(!showPassword)}>
                                 <Icon name={showPassword ? "eye-off" : "eye"} size={22} color="#000000" />
                             </TouchableOpacity>

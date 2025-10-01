@@ -56,6 +56,7 @@ export default function BoxScreen() {
                     <TextInput
                         style={styles.textInput}
                         placeholder="Pesquisar..."
+                        placeholderTextColor="#8C8787"
                         value={search}
                         onChangeText={(text) => {
                             setSearch(text);

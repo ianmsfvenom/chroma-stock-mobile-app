@@ -130,6 +130,7 @@ export default function ProductScreen() {
                         <TextInput
                             style={styles.textInput} 
                             placeholder="Pesquisar..." 
+                            placeholderTextColor="#8C8787"
                             value={search} onChangeText={(text) => {
                                 setSearch(text);
                                 reloadProductList(text);
