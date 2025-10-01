@@ -32,7 +32,7 @@ export default function LoginScreen() {
             await AsyncStorage.setItem('access_token', `Bearer ${data.access_token}`);
             router.replace('/(tabs)/product');
         } catch (error) {
-            Alert.alert('Erro', 'Ocorreu um erro ao fazer o login! ' + error);
+            Alert.alert('Erro', 'Ocorreu um erro ao fazer o login!\n\nErro: ' + error);
         }
     }
 
