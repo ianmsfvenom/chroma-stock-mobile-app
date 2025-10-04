@@ -1,7 +1,7 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { desktopBaseURL } from "@/constants/url";
-import { ProductDetailsResponse } from "@/types/response";
+import { ProductDetailsResponse } from "@/types/responses/product-response";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router, useLocalSearchParams } from "expo-router";

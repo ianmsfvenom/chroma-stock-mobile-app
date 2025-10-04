@@ -1,11 +1,10 @@
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
-import { useThemeColor } from "@/hooks/use-theme-color";
-import { BoxMovementDetailsResponse } from "@/types/response";
+import { BoxMovementDetailsResponse } from "@/types/responses/box-movement-response";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
-import { useLocalSearchParams, useSearchParams } from "expo-router/build/hooks";
+import { useLocalSearchParams } from "expo-router/build/hooks";
 import { useEffect, useState } from "react";
 import { Alert, ScrollView, StyleSheet, TouchableOpacity, useColorScheme } from "react-native";
 

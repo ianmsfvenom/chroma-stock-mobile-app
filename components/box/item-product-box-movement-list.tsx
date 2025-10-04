@@ -1,8 +1,8 @@
-import { ProductMovementsBoxDetailsResponse } from "@/types/response";
 import { StyleSheet, View } from "react-native";
 import TagBoxMovement from "../tag-movement";
 import { ThemedText } from "../themed-text";
 import { ThemedView } from "../themed-view";
+import { ProductMovementsBoxDetailsResponse } from "@/types/responses/box-response";
 
 interface ItemProductBoxMovementListProps {
     productBoxMovement: ProductMovementsBoxDetailsResponse

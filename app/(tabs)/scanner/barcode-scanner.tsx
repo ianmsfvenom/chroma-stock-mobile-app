@@ -4,7 +4,7 @@ import OverlayBarcode from '@/components/scanner/overlay-barcode';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { desktopBaseURL } from '@/constants/url';
-import { ProductListResponse } from '@/types/response';
+import { ProductListResponse } from '@/types/responses/product-response';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CameraView } from 'expo-camera';
 import { router } from 'expo-router';

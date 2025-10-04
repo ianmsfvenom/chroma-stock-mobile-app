@@ -1,7 +1,7 @@
-import { ProductInBoxDetailsResponse } from "@/types/response";
-import { Image, StyleSheet, useColorScheme, View } from "react-native";
+import { Image, StyleSheet, View } from "react-native";
 import { ThemedView } from "../themed-view";
 import { ThemedText } from "../themed-text";
+import { ProductInBoxDetailsResponse } from "@/types/responses/box-response";
 
 interface ItemProductInBoxListProps {
     product: ProductInBoxDetailsResponse

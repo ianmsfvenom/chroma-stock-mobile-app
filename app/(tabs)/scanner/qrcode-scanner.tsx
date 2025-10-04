@@ -3,7 +3,7 @@ import OverlayQRCode from '@/components/scanner/overlay-qrcode';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { desktopBaseURL } from '@/constants/url';
-import { BoxListResponse } from '@/types/response';
+import { BoxListResponse } from '@/types/responses/box-response';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CameraView } from 'expo-camera';
 import { router } from 'expo-router';

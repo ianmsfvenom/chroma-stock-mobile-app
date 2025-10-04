@@ -2,7 +2,7 @@ import ItemBoxList from "@/components/box/item-box-list";
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { desktopBaseURL } from "@/constants/url";
-import { BoxListResponse } from "@/types/response";
+import { BoxListResponse } from "@/types/responses/box-response";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";

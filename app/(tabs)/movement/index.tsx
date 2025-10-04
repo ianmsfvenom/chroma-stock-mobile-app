@@ -3,7 +3,8 @@ import ItemProductBoxMovementList from "@/components/movement/item-product-box-m
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { desktopBaseURL } from "@/constants/url";
-import { BoxMovementListResponse, ProductBoxMovementListResponse } from "@/types/response";
+import { BoxMovementListResponse } from "@/types/responses/box-movement-response";
+import { ProductBoxMovementListResponse } from "@/types/responses/product-box-movement-response";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
