@@ -6,8 +6,6 @@ import { router } from "expo-router";
 import { Alert, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from "react-native";
 
 export default function LogoutScreen() {
-    const theme = useColorScheme();
-
     const handleLogout = async () => {
         Alert.alert('Atenção', 'Deseja realmente fazer logout?', [
             {
@@ -17,6 +15,12 @@ export default function LogoutScreen() {
             {
                 text: 'Sim',
                 onPress: async () => {
+                    const token = await AsyncStorage.getItem('access_token');
+                    if(token) {
+                        await fetch(`${process.env.EXPO_PUBLIC_API_URL}/api/auth/logout`, {
+                            headers: { 'Authorization': token }
+                        })
+                    }
                     await AsyncStorage.removeItem('access_token');
                     router.replace('/login');
                 }

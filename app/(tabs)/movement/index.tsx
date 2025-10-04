@@ -7,7 +7,7 @@ import { BoxMovementListResponse, ProductBoxMovementListResponse } from "@/types
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Alert, ScrollView, StyleSheet, useColorScheme } from "react-native";
+import { Alert, ScrollView, StyleSheet, TouchableOpacity, useColorScheme } from "react-native";
 
 export default function MovementScreen() {
     const theme = useColorScheme();
@@ -60,7 +60,12 @@ export default function MovementScreen() {
                     contentContainerStyle={styles.cardMovementScrollContent}
                 >
                     {productBoxMovement.map((productBoxMovement, index) => (
-                        <ItemProductBoxMovementList key={index} productBoxMovement={productBoxMovement} />
+                        <TouchableOpacity
+                            onPress={() => router.push({ pathname: '/(tabs)/movement/details-product-box-movement', params: { id: productBoxMovement.id } })} 
+                            key={index}
+                        >
+                            <ItemProductBoxMovementList key={index} productBoxMovement={productBoxMovement} />
+                        </TouchableOpacity>
                     ))}
                 </ScrollView>
             </ThemedView>
@@ -74,7 +79,12 @@ export default function MovementScreen() {
                     contentContainerStyle={styles.cardMovementScrollContent}
                 >
                 {boxMovements.map((boxMovement, index) => (
-                    <ItemBoxMovementList key={index} boxMovement={boxMovement} />
+                    <TouchableOpacity
+                        onPress={() => router.push({ pathname: '/(tabs)/movement/details-box-movement', params: { id: boxMovement.id } })} 
+                        key={index}
+                    >
+                        <ItemBoxMovementList key={index} boxMovement={boxMovement} />
+                    </TouchableOpacity>
                 ))}
                 </ScrollView>
             </ThemedView>

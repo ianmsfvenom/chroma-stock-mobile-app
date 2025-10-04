@@ -1,3 +1,5 @@
+// Produtos
+
 export type ProductListResponse = {
     id: number;
     name: string;
@@ -39,6 +41,8 @@ export type ProductDetailsResponse = {
     }[]
 }
 
+// Categorias e Subcategorias
+
 export type CategoryResponse = {
     id: number;
     name: string;
@@ -50,6 +54,8 @@ export type SubcategoryResponse = {
     category_id: number;
     category_name: string;
 }
+
+// Caixas
 
 export type BoxListResponse = {
     id: number;
@@ -101,13 +107,65 @@ export type ProductMovementsBoxDetailsResponse = {
 export type BoxMovementBoxDetailsResponse = {
     id: number;
     movement_type: string;
+    author: string;
     origin_deposit: string | null;
     origin_location: string | null;
     destination_deposit: string | null;
     destination_location: string | null;
     moved_at: string;
-    author: string;
     obs: string | null;
+}
+
+// Movimentações de Produtos em Caixas
+
+export type ProductBoxMovementListResponse = {
+    id: number;
+    product_name: string;
+    product_id: number;
+    quantity: string;
+    movement_type: string;
+    origin_box_code: string | null;
+    origin_box_id: number | null;
+    destination_box_code: string | null;
+    destination_box_id: number | null;
+    author: string;
+    moved_at: string;
+}
+
+export type ProductBoxMovementDetailsResponse = {
+    id: number;
+    movement_type: string;
+    quantity: number ;
+    moved_at: string;
+    author: string;
+    product: {
+        id: number;
+        name: string;
+        price: number;
+        sku: string;
+        barcode: string;
+        category: string;
+        subcategory: string | null;
+        obs: string | null;
+    };
+    origin_box: {
+        id: number;
+        code: string;
+        type_box: string;
+        status: string;
+        obs: string | null;
+        actual_deposit: string;
+        actual_location: string;
+    } | null;
+    destination_box: {
+        id: number;
+        code: string;
+        type_box: string;
+        status: string;
+        obs: string | null;
+        actual_deposit: string;
+        actual_location: string;
+    } | null;
 }
 
 export type CreateProductBoxMovementResponse = {
@@ -130,6 +188,48 @@ export type CreateProductBoxMovementResponse = {
     updated_at: string;
 }
 
+// Movimentações de Caixas
+
+export type BoxMovementListResponse = {
+    id: number;
+    movement_type: string;
+    box_code: string;
+    box_id: string;
+    origin_deposit: string | null;
+    origin_location: string | null;
+    origin_location_id: number | null;
+    destination_deposit: string | null;
+    destination_location: string | null;
+    destination_location_id: number | null;
+    moved_at: string;
+    author: string;
+}
+
+export type BoxMovementDetailsResponse = {
+    id: number;
+    movement_type: string;
+    moved_at: string;
+    author: string;
+    box: {
+        id: number;
+        code: string;
+        type_box: string;
+        obs: string | null;
+        status: string;
+        actual_deposit: string;
+        actual_location: string;
+    };
+    origin_deposit: string | null;
+    origin_location: string | null;
+    origin_location_id: number | null;
+
+    destination_deposit: string | null;
+    destination_location: string | null;
+    destination_location_id: number | null;
+
+    obs: string | null;
+}
+
 export type CreateBoxMovementResponse = {
     id: number;
     movement_type: string;
@@ -142,6 +242,7 @@ export type CreateBoxMovementResponse = {
     moved_at: string;
 }
 
+// Depósitos e Localizações
 export type DepositResponse = {
     id: number;
     name: string;
@@ -160,33 +261,4 @@ export type LocationResponse = {
     obs: string | null;
     created_at: string;
     updated_at: string;
-}
-
-export type ProductBoxMovementListResponse = {
-    id: number;
-    product_name: string;
-    product_id: number;
-    quantity: string;
-    movement_type: string;
-    origin_box_code: string | null;
-    origin_box_id: number | null;
-    destination_box_code: string | null;
-    destination_box_id: number | null;
-    author: string;
-    moved_at: string;
-}
-
-export type BoxMovementListResponse = {
-    id: number;
-    movement_type: string;
-    box_code: string;
-    box_id: string;
-    origin_deposit: string | null;
-    origin_location: string | null;
-    origin_location_id: number | null;
-    destination_deposit: string | null;
-    destination_location: string | null;
-    destination_location_id: number | null;
-    moved_at: string;
-    author: string;
 }
