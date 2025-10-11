@@ -12,7 +12,7 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL": "http://192.168.1.13:8000"
+        "EXPO_PUBLIC_API_URL": "https://painel.chromatechnology.com.br"
       }
     },
     "preview": {
@@ -22,13 +22,13 @@
       "distribution": "internal",
       "environment": "preview",
       "env": {
-        "EXPO_PUBLIC_API_URL": "http://192.168.1.13:8000"
+        "EXPO_PUBLIC_API_URL": "https://painel.chromatechnology.com.br"
       }
     },
     "production": {
       "autoIncrement": true,
       "env": {
-        "EXPO_PUBLIC_API_URL": "http://192.168.1.13:8000"
+        "EXPO_PUBLIC_API_URL": "https://painel.chromatechnology.com.br"
       }
     }
   },
