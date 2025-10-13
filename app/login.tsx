@@ -28,8 +28,22 @@ export default function LoginScreen() {
                 else return Alert.alert('Atenção', 'Ocorreu um erro ao fazer o login! Status: ' + requestLogin.status);
             }
 
-            const data = await requestLogin.json();
-            await AsyncStorage.setItem('access_token', `Bearer ${data.access_token}`);
+            const dataLogin = await requestLogin.json();
+
+            const requestUser = await fetch(`${desktopBaseURL}/api/auth/user`, {
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${dataLogin.access_token}` }
+            });
+
+            if(!requestUser.ok) {
+                if(requestUser.status === 401) return Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!');
+                else return Alert.alert('Atenção', 'Ocorreu um erro ao fazer o login! Status: ' + requestUser.status);
+            }
+
+            const dataUser = await requestUser.json();
+
+            await AsyncStorage.setItem('access_token', `Bearer ${dataLogin.access_token}`);
+            await AsyncStorage.setItem('user', JSON.stringify(dataUser));
+
             router.replace('/(tabs)/product');
         } catch (error) {
             Alert.alert('Erro', 'Ocorreu um erro ao fazer o login!\n\nErro: ' + error);

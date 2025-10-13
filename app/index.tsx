@@ -16,7 +16,9 @@ export default function Index() {
             })
 
             if (requestCheckToken.ok) return router.replace('/(tabs)/product');
+
             await AsyncStorage.removeItem('access_token');
+            
             Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente! Status: ' + requestCheckToken.status,
                 [{ text: 'OK', onPress: () => router.replace('/login') }]
             );
