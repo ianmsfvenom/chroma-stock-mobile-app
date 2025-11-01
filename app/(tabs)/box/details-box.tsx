@@ -17,6 +17,7 @@ import { refreshBoxData } from ".";
 import { desktopBaseURL } from "@/constants/url";
 import { BoxDetailsResponse, BoxMovementBoxDetailsResponse, ProductInBoxDetailsResponse, ProductMovementsBoxDetailsResponse } from "@/types/responses/box-response";
 import { CreateBoxMovementResponse } from "@/types/responses/box-movement-response";
+import checkPermission from "@/utils/check-permission";
 
 export default function DetailsBoxScreen() {
     const { id } = useLocalSearchParams();
@@ -32,6 +33,8 @@ export default function DetailsBoxScreen() {
     const [ visibleTransferBox , setVisibleTransferBox ] = useState<boolean>(false);
     const [ visibleReturnBox , setVisibleReturnBox ] = useState<boolean>(false);
 
+    const [ isOnlyView, setIsOnlyView ] = useState<boolean>(false);
+
     const theme = useColorScheme();
 
     useEffect(() => {
@@ -39,6 +42,8 @@ export default function DetailsBoxScreen() {
             const token = await AsyncStorage.getItem('access_token');
             if (!token) 
                 return Alert.alert('Atenção', 'Sua sessão expirou! Faça login novamente!', [{ text: 'OK', onPress: () => router.replace('/login') }]);
+            
+            setIsOnlyView(!(await checkPermission(['Administrador', 'Moderador', 'Estoque'])));
             
             try {
                 const response = await fetch(`${desktopBaseURL}/api/box/details/${id}`, { headers: { 'Authorization': token } });
@@ -201,29 +206,29 @@ export default function DetailsBoxScreen() {
                 <ThemedView style={styles.cardDetailBox} lightColor="#f1f1f1ff" darkColor="#18181B">
                     <View style={styles.productsInBox}>
                         <ThemedText style={styles.productsInBoxTitle}>Produtos na Caixa</ThemedText>
-                        <View style={styles.actionsButton}>
-                            <TouchableOpacity 
+                        {!isOnlyView && <View style={styles.actionsButton}>
+                            <TouchableOpacity
                                 onPress={handleAddProductInBox} 
                                 style={[styles.productInBoxButton, theme === 'dark' ? styles.addProductInBoxButtonDark : styles.addProductInBoxButtonLight]}
                             >
                                 <ThemedText style={{ fontSize: 12, color: theme == 'dark' ? '#7BF2A8' : '#162C23' }}>Adicionar</ThemedText>
                                 <Ionicons name="add-circle-outline" size={20} color={theme == 'dark' ? '#7BF2A8' : '#162C23'} />
                             </TouchableOpacity>
-                             <TouchableOpacity 
+                             <TouchableOpacity
                                 onPress={handleRemoveProductInBox} 
                                 style={[styles.productInBoxButton, theme === 'dark' ? styles.removeProductInBoxButtonDark : styles.removeProductInBoxButtonLight]}
                             >
                                 <ThemedText style={{ fontSize: 12, color: theme == 'dark' ? '#FF3F3F' : '#2C1616' }}>Remover</ThemedText>
                                 <Ionicons name="remove-circle-outline" size={20} color={theme == 'dark' ? '#FF3F3F' : '#2C1616'} />
                             </TouchableOpacity>
-                            <TouchableOpacity 
+                            <TouchableOpacity
                                 onPress={handleTransferProductInBox} 
                                 style={[styles.productInBoxButton, theme === 'dark' ? styles.transferProductInBoxButtonDark : styles.transferProductInBoxButtonLight]}
                             >
                                 <ThemedText style={{ fontSize: 12, color: theme == 'dark' ? '#9ACAFF' : '#222733' }}>Transferir</ThemedText>
                                 <Ionicons name="swap-horizontal-outline" size={20} color={theme == 'dark' ? '#9ACAFF' : '#222733'} />
                             </TouchableOpacity>
-                        </View>
+                        </View>}
                         <ScrollView 
                             style={styles.productsInBoxScroll} 
                             nestedScrollEnabled={true}
@@ -261,8 +266,8 @@ export default function DetailsBoxScreen() {
                 <ThemedView style={styles.cardDetailBox} lightColor="#f1f1f1ff" darkColor="#18181B">
                     <View style={styles.boxMovement}>
                         <ThemedText style={styles.boxMovementTitle}>Movimentações de Caixas</ThemedText>
-                        <View style={styles.actionsButton}>
-                            <TouchableOpacity 
+                        {!isOnlyView && <View style={styles.actionsButton}>
+                            <TouchableOpacity
                                 onPress={handleRemoveBox} 
                                 style={[
                                     details?.status === 'in stock' ? { display: 'flex' } : { display: 'none' },
@@ -284,7 +289,7 @@ export default function DetailsBoxScreen() {
                                 <ThemedText style={{ fontSize: 12, fontWeight: 'bold', color: theme == 'dark' ? '#7BF2A8' : '#162C23' }}>Retornar do estoque</ThemedText>
                                 <Ionicons name="return-up-back-outline" size={20} color={theme == 'dark' ? '#7BF2A8' : '#162C23'} />
                             </TouchableOpacity>
-                            <TouchableOpacity 
+                            <TouchableOpacity
                                 onPress={handleTransferBox} 
                                 style={[
                                     details?.status === 'in stock' ? { display: 'flex' } : { display: 'none' },
@@ -295,7 +300,7 @@ export default function DetailsBoxScreen() {
                                 <ThemedText style={{ fontSize: 12, fontWeight: 'bold', color: theme == 'dark' ? '#9ACAFF' : '#222733' }}>Transferir caixa</ThemedText>
                                 <Ionicons name="swap-horizontal-outline" size={20} color={theme == 'dark' ? '#9ACAFF' : '#222733'} />
                             </TouchableOpacity>
-                        </View>
+                        </View> } 
                         <ScrollView style={styles.boxMovementScroll}
                             contentContainerStyle={styles.boxMovementScrollContent}
                             nestedScrollEnabled={true}
